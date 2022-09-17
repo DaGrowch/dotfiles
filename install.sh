@@ -2,6 +2,7 @@
 
 # Define a function which rename a `target` file to `target.backup` if the file
 # exists and if it's a 'real' file, ie not a symlink
+echo 'FIRST STEP'
 backup() {
   target=$1
   if [ -e "$target" ]; then
@@ -12,6 +13,7 @@ backup() {
   fi
 }
 
+echo '2 STEP'
 symlink() {
   file=$1
   link=$2
@@ -21,6 +23,7 @@ symlink() {
   fi
 }
 
+echo '3 STEP'
 # For all files `$name` in the present folder except `*.sh`, `README.md`, `settings.json`,
 # and `config`, backup the target file located at `~/.$name` and symlink `$name` to `~/.$name`
 for name in aliases gitconfig irbrc rspec zprofile zshrc; do
@@ -31,6 +34,7 @@ for name in aliases gitconfig irbrc rspec zprofile zshrc; do
   fi
 done
 
+echo '4 STEP'
 # Install zsh-syntax-highlighting plugin
 CURRENT_DIR=`pwd`
 ZSH_PLUGINS_DIR="$HOME/.oh-my-zsh/custom/plugins"
@@ -44,6 +48,7 @@ cd "$CURRENT_DIR"
 
 # Symlink VS Code settings and keybindings to the present `settings.json` and `keybindings.json` files
 # If it's a macOS
+echo '5 STEP'
 if [[ `uname` =~ "Darwin" ]]; then
   CODE_PATH=~/Library/Application\ Support/Code/User
 # Else, it's a Linux
@@ -55,12 +60,14 @@ else
   fi
 fi
 
+echo '6 STEP'
 for name in settings.json keybindings.json; do
   target="$CODE_PATH/$name"
   backup $target
   symlink $PWD/$name $target
 done
 
+echo '7 STEP'
 # Symlink SSH config file to the present `config` file for macOS and add SSH passphrase to the keychain
 if [[ `uname` =~ "Darwin" ]]; then
   target=~/.ssh/config
@@ -70,6 +77,7 @@ if [[ `uname` =~ "Darwin" ]]; then
 fi
 
 # Refresh the current terminal with the newly installed configuration
+echo '8 STEP osecour'
 exec zsh
 
 echo "👌 Carry on with git setup!"
